@@ -1,0 +1,149 @@
+
+/home/oleg/scr111/scr1/build/verilator_AHB_IMC/scall.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text.init:
+
+00000000 <SIM_EXIT-0xf4>:
+	...
+
+000000f4 <SIM_EXIT>:
+  f4:	00000013          	nop
+
+000000f8 <SIM_STOP>:
+  f8:	0000006f          	j	f8 <SIM_STOP>
+  fc:	ffff                	0xffff
+  fe:	ffff                	0xffff
+	...
+
+000002c0 <trap_vector>:
+ 2c0:	34202773          	csrr	a4,mcause
+ 2c4:	47ad                	li	a5,11
+ 2c6:	00f70e63          	beq	a4,a5,2e2 <_report>
+ 2ca:	00000717          	auipc	a4,0x0
+ 2ce:	11a70713          	addi	a4,a4,282 # 3e4 <mtvec_handler>
+ 2d2:	c311                	beqz	a4,2d6 <trap_vector+0x16>
+ 2d4:	8702                	jr	a4
+ 2d6:	34202773          	csrr	a4,mcause
+ 2da:	00075363          	bgez	a4,2e0 <handle_exception>
+ 2de:	a009                	j	2e0 <handle_exception>
+
+000002e0 <handle_exception>:
+ 2e0:	4505                	li	a0,1
+
+000002e2 <_report>:
+ 2e2:	11e0006f          	j	400 <STACK_SIZE>
+ 2e6:	00000013          	nop
+ 2ea:	00000013          	nop
+ 2ee:	00000013          	nop
+ 2f2:	00000013          	nop
+ 2f6:	00000013          	nop
+ 2fa:	00000013          	nop
+ 2fe:	0001                	nop
+
+00000300 <_start>:
+ 300:	f1402573          	csrr	a0,mhartid
+ 304:	e101                	bnez	a0,304 <_start+0x4>
+ 306:	4e01                	li	t3,0
+ 308:	00000297          	auipc	t0,0x0
+ 30c:	fb828293          	addi	t0,t0,-72 # 2c0 <trap_vector>
+ 310:	30529073          	csrw	mtvec,t0
+ 314:	4505                	li	a0,1
+ 316:	057e                	slli	a0,a0,0x1f
+ 318:	00054863          	bltz	a0,328 <_start+0x28>
+ 31c:	0ff0000f          	fence
+ 320:	85f2                	mv	a1,t3
+ 322:	4501                	li	a0,0
+ 324:	00000073          	ecall
+ 328:	00000297          	auipc	t0,0x0
+ 32c:	cd828293          	addi	t0,t0,-808 # 0 <CL_SIZE-0x20>
+ 330:	00028e63          	beqz	t0,34c <_start+0x4c>
+ 334:	10529073          	csrw	stvec,t0
+ 338:	0000b2b7          	lui	t0,0xb
+ 33c:	10928293          	addi	t0,t0,265 # b109 <__global_pointer$+0xa441>
+ 340:	30229073          	csrw	medeleg,t0
+ 344:	30202373          	csrr	t1,medeleg
+ 348:	f8629ce3          	bne	t0,t1,2e0 <handle_exception>
+ 34c:	30005073          	csrwi	mstatus,0
+ 350:	00002537          	lui	a0,0x2
+ 354:	80050513          	addi	a0,a0,-2048 # 1800 <__global_pointer$+0xb38>
+ 358:	30052073          	csrs	mstatus,a0
+ 35c:	00000297          	auipc	t0,0x0
+ 360:	04428293          	addi	t0,t0,68 # 3a0 <_run_test>
+ 364:	34129073          	csrw	mepc,t0
+ 368:	f1402573          	csrr	a0,mhartid
+ 36c:	30200073          	mret
+	...
+
+Disassembly of section .text:
+
+000003a0 <_run_test>:
+ 3a0:	4e09                	li	t3,2
+ 3a2:	000022b7          	lui	t0,0x2
+ 3a6:	80028293          	addi	t0,t0,-2048 # 1800 <__global_pointer$+0xb38>
+ 3aa:	3002b073          	csrc	mstatus,t0
+ 3ae:	00000297          	auipc	t0,0x0
+ 3b2:	01028293          	addi	t0,t0,16 # 3be <_run_test+0x1e>
+ 3b6:	34129073          	csrw	mepc,t0
+ 3ba:	30200073          	mret
+ 3be:	4e05                	li	t3,1
+ 3c0:	00000073          	ecall
+ 3c4:	a019                	j	3ca <fail>
+ 3c6:	01c01863          	bne	zero,t3,3d6 <pass>
+
+000003ca <fail>:
+ 3ca:	0ff0000f          	fence
+ 3ce:	85f2                	mv	a1,t3
+ 3d0:	4505                	li	a0,1
+ 3d2:	00000073          	ecall
+
+000003d6 <pass>:
+ 3d6:	0ff0000f          	fence
+ 3da:	85f2                	mv	a1,t3
+ 3dc:	4501                	li	a0,0
+ 3de:	00000073          	ecall
+ 3e2:	0001                	nop
+
+000003e4 <mtvec_handler>:
+ 3e4:	4321                	li	t1,8
+ 3e6:	342022f3          	csrr	t0,mcause
+ 3ea:	fe6290e3          	bne	t0,t1,3ca <fail>
+ 3ee:	b7e5                	j	3d6 <pass>
+
+000003f0 <ecall>:
+ 3f0:	00000073          	ecall
+	...
+
+00000400 <sc_exit>:
+ 400:	cf5ff06f          	j	f4 <SIM_EXIT>
+ 404:	00000013          	nop
+ 408:	00000013          	nop
+ 40c:	00000013          	nop
+ 410:	00000013          	nop
+ 414:	00000013          	nop
+ 418:	00000013          	nop
+ 41c:	00000013          	nop
+	...
+
+Disassembly of section .data:
+
+00000440 <begin_regstate>:
+	...
+
+Disassembly of section .tohost:
+
+00000480 <tohost>:
+	...
+
+000004c0 <fromhost>:
+	...
+
+Disassembly of section .sdata:
+
+000004c8 <__global_pointer$-0x800>:
+	...
+
+Disassembly of section .stack:
+
+0000fc00 <.stack>:
+	...
