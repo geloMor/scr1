@@ -110,10 +110,6 @@
 trap_vector:                                                            \
         /* test whether the test came from pass/fail */                 \
         csrr a4, mcause;                                                \
-        li a5, CAUSE_USER_ECALL;                                        \
-        beq a4, a5, _report;                                            \
-        li a5, CAUSE_SUPERVISOR_ECALL;                                  \
-        beq a4, a5, _report;                                            \
         li a5, CAUSE_MACHINE_ECALL;                                     \
         beq a4, a5, _report;                                            \
         /* if an mtvec_handler is defined, jump to it */                \
