@@ -103,14 +103,23 @@
 
 #define RVTEST_CODE_BEGIN                                               \
         .section .text.init;                                            \
-        .org 0xC0, 0x00;                                                \
+        .org 0x200, 0x00;                                                \
         .align  6;                                                      \
         .weak stvec_handler;                                            \
         .weak mtvec_handler;                                            \
 trap_vector:                                                            \
         /* test whether the test came from pass/fail */                 \
-        csrr a4, mcause;                                                \
-        li a5, CAUSE_MACHINE_ECALL;                                     \
+        li a1, 0xf0000000;                                          	   \
+	li a0, ('e');\
+        sb a0, 0(a1);\
+        li a0, ('c');\
+        sb a0, 0(a1);\
+        li a0, ('a');\
+        sb a0, 0(a1);\
+        li a0, ('l');\
+        sb a0, 0(a1);\
+        li a0, ('l');\
+        sb a0, 0(a1);\
         beq a4, a5, _report;                                            \
         /* if an mtvec_handler is defined, jump to it */                \
         la a4, mtvec_handler;                                           \

@@ -313,7 +313,7 @@ always_ff @(posedge clk) begin
                 tests_passed    += test_pass;
                 $fwrite(f_results, "%s\t\t%s\n", test_file, (test_pass ? "PASS" : "__FAIL"));
                 if (test_pass) begin
-                    $write("\033[0;32mECALL\033[0m\n"); //Test passed
+                    $write("\033[0;32mTest passed\033[0m\n");
                 end else begin
                     $write("\033[0;31mTest failed\033[0m\n");
                 end
