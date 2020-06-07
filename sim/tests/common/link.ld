@@ -28,7 +28,9 @@ SECTIONS {
     LONG(-1);
     . = 0x200;
     PROVIDE(__TEXT_START__ = .);
-    *(.text.init) 
+    *(.text.init)
+    . = 0x600;
+    *(.text.start)
   } >RAM
 
   .text  : {

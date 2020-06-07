@@ -120,6 +120,12 @@ trap_vector:                                                            \
         sb a0, 0(a1);\
         li a0, ('l');\
         sb a0, 0(a1);\
+        csrr a4, mcause;                                                \
+        li a5, CAUSE_USER_ECALL;                                        \
+        beq a4, a5, _report;                                            \
+        li a5, CAUSE_SUPERVISOR_ECALL;                                  \
+        beq a4, a5, _report;                                            \
+        li a5, CAUSE_MACHINE_ECALL;                                     \
         beq a4, a5, _report;                                            \
         /* if an mtvec_handler is defined, jump to it */                \
         la a4, mtvec_handler;                                           \
@@ -139,6 +145,8 @@ _report:                                                                \
         .align  6;                                                      \
         .globl _start;                                                  \
 _start:                                                                 \
+        .section .text.start;                                            \
+        .org 0x0, 0x00;                                               \
         RISCV_MULTICORE_DISABLE;                                        \
         /*INIT_SPTBR;*/                                                 \
         /*INIT_PMP;*/                                                   \
