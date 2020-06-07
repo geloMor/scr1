@@ -109,7 +109,9 @@
         .weak mtvec_handler;                                            \
 trap_vector:                                                            \
         /* test whether the test came from pass/fail */                 \
-        li a1, 0xf0000000;                                          	   \
+        addi t2, a0, 0;\
+        addi t4, a1, 0;\
+        li a1, 0xf0000000;\
 	li a0, ('e');\
         sb a0, 0(a1);\
         li a0, ('c');\
@@ -120,6 +122,8 @@ trap_vector:                                                            \
         sb a0, 0(a1);\
         li a0, ('l');\
         sb a0, 0(a1);\
+        addi a0, t2, 0;\
+        addi a1, t4, 0;\
         csrr a4, mcause;                                                \
         li a5, CAUSE_USER_ECALL;                                        \
         beq a4, a5, _report;                                            \
